@@ -107,6 +107,7 @@ int main(int argc,char *argv[])
   /* Alternative: solve directly using dgbsv */
   if (IMPLEM == SV) {
     // TODO : use dgbsv
+    dgbsv_(&la, &kl, &ku, &NRHS, AB, &lab, ipiv, RHS, &la, &info);
   }
 
   /* Write results to files */
