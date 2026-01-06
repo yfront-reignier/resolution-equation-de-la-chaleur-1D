@@ -97,6 +97,26 @@ int indexABCol(int i, int j, int *lab){
 
 int dgbtrftridiag(int *la, int*n, int *kl, int *ku, double *AB, int *lab, int *ipiv, int *info){
   // TODO: Implement specialized LU factorization for tridiagonal matrices
-  dgbtrf_(la, n, kl, ku, AB, lab, ipiv, info);
+  *info = 0;
+  
+  for(int i = 0; i < *n - 1; i++) {
+    double pivot = AB[indexABCol(*ku, i, lab)];
+
+    if(fabs(pivot) < 1e-15) {
+      *info = i + 1;
+      return *info;
+    }
+
+    double mult = AB[indexABCol(*ku + 1, i, lab)] / pivot;
+
+    AB[indexABCol(*ku, i + 1, lab)] = mult;
+
+    AB[indexABCol(*ku, i + 1, lab)] -= mult;
+  }
+
+  if(fabs(AB[indexABCol(*ku, *n - 1, lab)]) < 1e-15) {
+    *info = *n;
+  }
+
   return *info;
 }
